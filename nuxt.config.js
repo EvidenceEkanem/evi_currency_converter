@@ -1,7 +1,7 @@
 export default {
   mode: 'spa',
   router: {
-    base: '/<repository-name>/'
+    base: '/evi_currency_converter/'
   },
   /*
   ** Headers of the page
