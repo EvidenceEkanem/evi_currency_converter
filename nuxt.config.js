@@ -1,10 +1,8 @@
-const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
-  router: {
-    base: '/<repository-name>/'
-  }
-} : {}
 export default {
   mode: 'spa',
+  router: {
+    base: '/<repository-name>/'
+  },
   /*
   ** Headers of the page
   */
@@ -34,9 +32,6 @@ export default {
   ** Customize the progress-bar color
   */
   loading: { color: '#fff' },
-
-  ...routerBase,
-
   /*
   ** Global CSS
   */
