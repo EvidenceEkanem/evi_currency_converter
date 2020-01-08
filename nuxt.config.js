@@ -1,10 +1,9 @@
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
   router: {
-    base: '/evi_currency_converter/'
+    base: '/<repository-name>/'
   }
 } : {}
 export default {
-  ...routerBase,
   mode: 'spa',
   /*
   ** Headers of the page
@@ -35,6 +34,9 @@ export default {
   ** Customize the progress-bar color
   */
   loading: { color: '#fff' },
+
+  ...routerBase,
+
   /*
   ** Global CSS
   */
