@@ -1,8 +1,8 @@
 export default {
   mode: 'spa',
-  router: {
-    base: '/evi_currency_converter/'
-  },
+  // router: {
+  //   base: '/evi_currency_converter/'
+  // },
   /*
   ** Headers of the page
   */
