@@ -699,10 +699,10 @@ export default {
     methods: {
           async getCurrencyNames() {
             if(!isNaN(this.amount) || !isNaN(this.reversedAmount) || !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
-                let apiKey = 'e145a3d768e3e4b75068';
+                let apiKey = 'acd8826722ac2339c953';
                 this.currencies = await this.$axios.get('https://free.currconv.com/api/v7/currencies?apiKey=' + apiKey)
                 
-                if(!isNaN(this.amount) && !!this.fromCurrency && !!this.toCurrency){
+                if(!isNaN(this.amount) && !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
                 let value = Object.values(this.currencies.data.results);
             this.getCurr = value.map((i) => { 
                     if(this.fromCurrency == i.id){
@@ -715,7 +715,7 @@ export default {
                 })
                 }
                 
-                if(!isNaN(this.reversedAmount) && !!this.fromCurrency && !!this.toCurrency){
+                if(!isNaN(this.reversedAmount) && !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
                 let value = Object.values(this.currencies.data.results);
             this.getCurr = value.map((i) => { 
                     if(this.toCurrency == i.id){
@@ -735,7 +735,7 @@ export default {
     async convertCurrency() {
         if(!isNaN(this.amount) && !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
             this.reversedAmount = "";
-        let apiKey = 'e145a3d768e3e4b75068';
+        let apiKey = 'acd8826722ac2339c953';
         let query = this.fromCurrency + '_' + this.toCurrency;
 
             await this.$axios.get('https://free.currconv.com/api/v7/convert?q=' + query + '&compact=ultra&apiKey=' + apiKey).then(
@@ -754,7 +754,7 @@ export default {
     async convertCurrencyBackward() {
        if(!isNaN(this.reversedAmount) && !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
            this.amount = "";
-           let apiKey = 'e145a3d768e3e4b75068';
+           let apiKey = 'acd8826722ac2339c953';
            let query = this.toCurrency + '_' + this.fromCurrency;
            
    await this.$axios.get('https://free.currconv.com/api/v7/convert?q=' + query + '&compact=ultra&apiKey=' + apiKey).then(
