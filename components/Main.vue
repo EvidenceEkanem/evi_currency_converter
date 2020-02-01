@@ -11,9 +11,9 @@
                                     <label class="label">From</label>
                                     <div class="select">
                                         <div class="input-wrap">
-                                            <input type="text" class="form-control" :click="getCurrency()"  v-model="amount" value="1" name="finpt" id="finpt">
+                                            <input class="form-control" :click="getCurrencyNames()"  v-model="amount" value="1" name="finpt" id="finpt">
                                         </div>
-                                        <select id="fromCurr" name="fromCurr" v-model="fromCurrency"  data-show-subtext="true" class="selectpicker bs-select form-control" data-live-search="true" data-size="8">
+                                        <select id="fromCurrency" name="fromCurrency" v-model="fromCurrency"  data-show-subtext="true" class="selectpicker bs-select form-control" data-live-search="true" data-size="8">
                                                                                             <option data-content="<img class='flag' src='/img/flags/AE.png'> <span class='currency_code'>AED</span> <span class='currency_name'>United Arab Emirates Dirham</span>" 
                                                  value="AED">AED</option>
                                                                                                         <option data-content="<img class='flag' src='/img/flags/AF.png'> <span class='currency_code'>AFN</span> <span class='currency_name'>Afghan Afghani</span>" 
@@ -336,16 +336,18 @@
                                 <div class="col-md-2 col-sm-12 col-xs-12">
                                     <label class="label"><br /></label>
                                     <div class="select text-center">
-                                        <button :click="convertCurrency()" class="exchange-btn">=</button>
+                                        <button :click="convertCurrencyBackward()" class="exchange-btn">
+                                            <i class="fa fa-refresh text-white" style="font-size:24px"></i>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="col-md-5 col-sm-12 col-xs-12">
                                     <label class="label">To</label>
                                     <div class="select">
                                         <div class="input-wrap">
-                                            <input type="text" class="form-control" v-model="result" disabled name="tinpt" id="tinpt">
+                                            <input class="form-control" v-model="reversedAmount" name="tinpt" id="tinpt">
                                         </div>
-                                        <select id="toCurr" name="toCurr" v-model="toCurrency" :click="convertCurrency()"  data-show-subtext="true" class="selectpicker bs-select form-control" data-live-search="true" data-size="8">
+                                        <select id="toCurrency" name="toCurrency" v-model="toCurrency" :click="convertCurrency()"  data-show-subtext="true" class="selectpicker bs-select form-control" data-live-search="true" data-size="8">
                                                                           n                  <option data-content="<img class='flag' src='/img/flags/AE.png'> <span class='currency_code'>AED</span> <span class='currency_name'>United Arab Emirates Dirham</span>" 
                                                  value="AED">AED</option>
                                                                                                         <option data-content="<img class='flag' src='/img/flags/AF.png'> <span class='currency_code'>AFN</span> <span class='currency_name'>Afghan Afghani</span>" 
@@ -667,7 +669,7 @@
                                 </div>	
 
                                 <div class="col-12 text-center py-4" v-if="checkValue">
-                                    <span class="font-weight-bold h6">{{ amount }} {{ fromCurrencyName }}</span> equals <span class="font-weight-bold h6">{{ result }} {{ toCurrencyName }}</span>
+                                    <span class="font-weight-bold h6">{{ amount }} {{ reversedAmount }} {{ fromCurrencyName }}</span> equals <span class="font-weight-bold h6">{{ result }} {{ toCurrencyName }}</span>
                                 </div>
                             </div>
                         </div>
@@ -682,22 +684,27 @@ export default {
     data() {
         return {
             amount: "", 
+            reversedAmount: "",
             fromCurrency: "", 
             toCurrency: "",
             result: "",
-            getCurrencyNames: "",
+            getCurr: "",
             fromCurrencyName: "",
             toCurrencyName: "",
             checkValue: false,
+            valeu: "",
+            currencies: "",
         }
     },
     methods: {
-
-        async getCurrency() {
-            if(!!this.fromCurrency && !!this.toCurrency){
-                let currencies = await this.$axios.get(`https://free.currconv.com/api/v7/currencies?apiKey=9cb45cab632e50a59581`)
-                let valeu = Object.values(currencies.data.results)
-                this.getCurrencyNames = valeu.map((i) => { 
+          async getCurrencyNames() {
+            if(!isNaN(this.amount) || !isNaN(this.reversedAmount) || !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
+                let apiKey = 'e145a3d768e3e4b75068';
+                this.currencies = await this.$axios.get('https://free.currconv.com/api/v7/currencies?apiKey=' + apiKey)
+                
+                if(!isNaN(this.amount) && !!this.fromCurrency && !!this.toCurrency){
+                let value = Object.values(this.currencies.data.results);
+            this.getCurr = value.map((i) => { 
                     if(this.fromCurrency == i.id){
                         this.fromCurrencyName = i.currencyName;
                     } else if(this.toCurrency == i.id){
@@ -706,36 +713,63 @@ export default {
                         console.log("error getting currency name")
                     }
                 })
+                }
+                
+                if(!isNaN(this.reversedAmount) && !!this.fromCurrency && !!this.toCurrency){
+                let value = Object.values(this.currencies.data.results);
+            this.getCurr = value.map((i) => { 
+                    if(this.toCurrency == i.id){
+                        this.fromCurrencyName = i.currencyName;
+                    } else if(this.fromCurrency == i.id){
+                        this.toCurrencyName = i.currencyName;
+                    } else {
+                        console.log("error getting the currency names")
+                    }
+                })
+                }
             }else {
-                console.log("the from and to currency value must not be empty")
+                console.log("Unable to convert currency at the moment...")
             }
     },
 
-    convertCurrency() {
-        if(!!this.fromCurrency && !!this.toCurrency){
-  let apiKey = '9cb45cab632e50a59581';
-// dd361e4bc7a04157c832
-  let fromCurr = this.fromCurrency;
-  let toCurr = this.toCurrency;
-  let query = fromCurr + '_' + toCurr;
+    async convertCurrency() {
+        if(!isNaN(this.amount) && !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
+            this.reversedAmount = "";
+        let apiKey = 'e145a3d768e3e4b75068';
+        let query = this.fromCurrency + '_' + this.toCurrency;
 
+            await this.$axios.get('https://free.currconv.com/api/v7/convert?q=' + query + '&compact=ultra&apiKey=' + apiKey).then(
+            (response) => {
+                    let val = Object.values(response.data);
+                    let total = val * this.amount;
+                    this.result = Math.round(total * 100) / 100;
 
-   this.$axios.get('https://free.currconv.com/api/v7/convert?q=' + query + '&compact=ultra&apiKey=' + apiKey).then(
+            }).then(this.checkValue = true)
+
+        }else {
+                console.log("Unable to convert currency at the moment...")
+                }
+        },
+
+    async convertCurrencyBackward() {
+       if(!isNaN(this.reversedAmount) && !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
+           this.amount = "";
+           let apiKey = 'e145a3d768e3e4b75068';
+           let query = this.toCurrency + '_' + this.fromCurrency;
+           
+   await this.$axios.get('https://free.currconv.com/api/v7/convert?q=' + query + '&compact=ultra&apiKey=' + apiKey).then(
       (response) => {
-          let val = Object.values(response.data);
-            let total = val * this.amount;
+            let val = Object.values(response.data);
+            let total = val * this.reversedAmount;
             this.result = Math.round(total * 100) / 100;
 
       }).then(this.checkValue = true)
 
-
     }else {
-                console.log("the from and to currency value must not be empty")
+            console.log("Unable to convert currency at the moment...")
             }
     }
-    },
-    created() {
-        this.getCurrency()
+    
     }
 }
 </script>
