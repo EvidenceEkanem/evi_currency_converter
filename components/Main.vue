@@ -11,7 +11,7 @@
                                     <label class="label">From</label>
                                     <div class="select">
                                         <div class="input-wrap">
-                                            <input class="form-control" :click="getCurrencyNames()"  v-model="amount" value="1" name="finpt" id="finpt">
+                                            <input class="form-control" type="number" :click="getCurrencyNames()"  v-model="amount" value="1" name="finpt" id="finpt">
                                         </div>
                                         <select id="fromCurrency" name="fromCurrency" v-model="fromCurrency"  data-show-subtext="true" class="selectpicker bs-select form-control" data-live-search="true" data-size="8">
                                                                                             <option data-content="<img class='flag' src='/img/flags/AE.png'> <span class='currency_code'>AED</span> <span class='currency_name'>United Arab Emirates Dirham</span>" 
@@ -345,7 +345,7 @@
                                     <label class="label">To</label>
                                     <div class="select">
                                         <div class="input-wrap">
-                                            <input class="form-control" v-model="reversedAmount" name="tinpt" id="tinpt">
+                                            <input class="form-control" type="number" v-model="reversedAmount" name="tinpt" id="tinpt">
                                         </div>
                                         <select id="toCurrency" name="toCurrency" v-model="toCurrency" :click="convertCurrency()"  data-show-subtext="true" class="selectpicker bs-select form-control" data-live-search="true" data-size="8">
                                                                           n                  <option data-content="<img class='flag' src='/img/flags/AE.png'> <span class='currency_code'>AED</span> <span class='currency_name'>United Arab Emirates Dirham</span>" 
