@@ -766,7 +766,7 @@ export default {
       }).then(this.checkValue = true)
 
     }else {
-            alert("Unable to convert currency at the moment...")
+            console.log("Unable to convert currency at the moment...")
             }
     }
     
