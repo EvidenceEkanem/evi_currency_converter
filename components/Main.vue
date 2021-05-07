@@ -699,8 +699,7 @@ export default {
     methods: {
           async getCurrencyNames() {
             if(!!this.amount || !!this.reversedAmount || !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
-                let apiKey = 'e145a3d768e3e4b75068';
-                //bf6a69d6b9818e30c11d
+                let apiKey = '33b45b0c0704d28fa148';
                 this.currencies = await this.$axios.get('https://free.currconv.com/api/v7/currencies?apiKey=' + apiKey)
                 
                 if(!!this.amount && !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
@@ -736,7 +735,7 @@ export default {
     async convertCurrency() {
         if(!!this.amount && !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
             this.reversedAmount = "";
-        let apiKey = 'e145a3d768e3e4b75068';
+        let apiKey = '33b45b0c0704d28fa148';
         let query = this.fromCurrency + '_' + this.toCurrency;
 
             await this.$axios.get('https://free.currconv.com/api/v7/convert?q=' + query + '&compact=ultra&apiKey=' + apiKey).then(
@@ -755,7 +754,7 @@ export default {
     async convertCurrencyBackward() {
        if(!!this.reversedAmount && !!this.fromCurrency && !!this.toCurrency && this.fromCurrency != this.toCurrency){
            this.amount = "";
-           let apiKey = 'e145a3d768e3e4b75068';
+           let apiKey = '33b45b0c0704d28fa148';
            let query = this.toCurrency + '_' + this.fromCurrency;
            
    await this.$axios.get('https://free.currconv.com/api/v7/convert?q=' + query + '&compact=ultra&apiKey=' + apiKey).then(
@@ -767,7 +766,7 @@ export default {
       }).then(this.checkValue = true)
 
     }else {
-            console.log("Unable to convert currency at the moment...")
+            alert("Unable to convert currency at the moment...")
             }
     }
     
