@@ -3,7 +3,7 @@
             <section class="header">
                 <div class="container">
                     <div class="converter">
-                        <h1>Kuffi Currency Converter</h1>
+                        <h1>World Currency Converter</h1>
                         <h2>All actual world currencies live rates, reference information, currency calculator.</h2>
                         <div class="convert-box">
                             <div class="row">
